@@ -1,6 +1,9 @@
 # Node Modules
 node_modules/
 
+# Execution reports
+test-results/
+
 # System files
 *.log
 *.tmp

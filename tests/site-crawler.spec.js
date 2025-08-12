@@ -1,8 +1,8 @@
 const { test, expect } = require('@playwright/test');
 
 // Configuration
-const DEFAULT_BASE_URL = 'https://carloschaves.com';
-const BASE_URL = process.env.BASE_URL || DEFAULT_BASE_URL;
+const DEFAULT_BASE_URL = 'https://www.carloschaves.com';
+const BASE_URL = 'https://www.carloschaves.com';//process.env.BASE_URL || DEFAULT_BASE_URL;
 const MAX_PAGES = process.env.MAX_PAGES ? parseInt(process.env.MAX_PAGES) : 50;
 const TIMEOUT = process.env.TIMEOUT ? parseInt(process.env.TIMEOUT) : 30000;
 
@@ -27,13 +27,13 @@ async function crawlSite(page, startUrl, options = {}) {
 
   console.log(`🚀 Starting crawl from: ${startUrl}`);
   console.log(`📝 Max pages limit: ${maxPages}`);
-  
+
   while (toVisit.length > 0 && visited.size < maxPages) {
     const url = toVisit.pop();
-    
+
     // Skip if already visited
     if (visited.has(url)) continue;
-    
+
     // Skip if matches exclude patterns
     if (excludePatterns.some(pattern => url.includes(pattern))) {
       console.log(`⏭️  Skipping excluded URL: ${url}`);
@@ -41,14 +41,14 @@ async function crawlSite(page, startUrl, options = {}) {
     }
 
     console.log(`🔍 Checking page [${visited.size + 1}/${maxPages}]: ${url}`);
-    
+
     try {
       // Navigate to page with timeout
-      const response = await page.goto(url, { 
+      const response = await page.goto(url, {
         waitUntil: 'networkidle',
-        timeout: TIMEOUT 
+        timeout: TIMEOUT
       });
-      
+
       // Validate page loads successfully
       const statusCode = response.status();
       if (statusCode >= 400) {
@@ -56,18 +56,25 @@ async function crawlSite(page, startUrl, options = {}) {
         console.log(`❌ Page failed: ${url} (HTTP ${statusCode})`);
         continue;
       }
-      
+
       console.log(`✅ Page OK: ${url} (HTTP ${statusCode})`);
-      
+
       // Extract all links from the page
-      const links = await page.$eval('a[href]', anchors => 
+      const links = await page.$$eval('a[href]', anchors =>
         anchors
           .map(a => ({ href: a.href, text: a.textContent.trim() }))
-          .filter(link => link.href && link.href !== '#')
+          .filter(link =>
+            link.href &&
+            link.href.trim() !== '' &&
+            !link.href.startsWith('mailto:') && // Ignora email
+            !link.href.startsWith('tel:') &&    // Ignora telefone
+            !link.href.startsWith('javascript:') && // Ignora JS
+            !link.href.includes('#') // Ignora qualquer link com âncora interna
+          )
       );
-      
+
       console.log(`🔗 Found ${links.length} links on ${url}`);
-      
+
       // Validate each link
       for (const { href: link, text } of links) {
         try {
@@ -76,12 +83,12 @@ async function crawlSite(page, startUrl, options = {}) {
             console.log(`📧 Skipping contact link: ${link}`);
             continue;
           }
-          
+
           if (link.startsWith('javascript:') || link.startsWith('#')) {
             console.log(`⚡ Skipping JS/anchor link: ${link}`);
             continue;
           }
-          
+
           // Check external links
           if (link.startsWith('http') && !link.startsWith(BASE_URL)) {
             if (!skipExternalLinks) {
@@ -101,13 +108,13 @@ async function crawlSite(page, startUrl, options = {}) {
             }
             continue;
           }
-          
+
           // Add internal links to crawl queue
           if (link.startsWith(BASE_URL) && !visited.has(link) && !toVisit.includes(link)) {
             toVisit.push(link);
             console.log(`📌 Added to queue: ${link}`);
           }
-          
+
           // Check relative/internal links
           if (!link.startsWith('http')) {
             const fullLink = new URL(link, url).href;
@@ -116,20 +123,20 @@ async function crawlSite(page, startUrl, options = {}) {
               console.log(`📌 Added relative link to queue: ${fullLink}`);
             }
           }
-          
+
         } catch (linkError) {
           brokenLinks.push({ url, link, text, error: linkError.message, type: 'error' });
           console.log(`❌ Link check failed: ${link} - ${linkError.message}`);
         }
       }
-      
+
     } catch (pageError) {
       errors.push({ url, error: pageError.message, type: 'navigation' });
       console.log(`❌ Navigation failed: ${url} - ${pageError.message}`);
     }
-    
+
     visited.add(url);
-    
+
     // Small delay to be respectful
     await page.waitForTimeout(500);
   }
@@ -141,14 +148,14 @@ async function crawlSite(page, startUrl, options = {}) {
   console.log(`✅ Total pages checked: ${visited.size}`);
   console.log(`❌ Pages with errors: ${errors.filter(e => e.type === 'page' || e.type === 'navigation').length}`);
   console.log(`🔗 Broken links found: ${brokenLinks.length}`);
-  
+
   if (errors.length > 0) {
     console.log('\n❌ PAGE ERRORS:');
     errors.forEach(error => {
       console.log(`  • ${error.url}: ${error.error}`);
     });
   }
-  
+
   if (brokenLinks.length > 0) {
     console.log('\n🔗 BROKEN LINKS:');
     brokenLinks.forEach(link => {
@@ -166,44 +173,44 @@ async function crawlSite(page, startUrl, options = {}) {
 test.describe('Website Health Check', () => {
   test('Crawl and validate all pages and links', async ({ page }) => {
     console.log(`🌐 Testing website: ${BASE_URL}`);
-    
+
     const options = {
       maxPages: MAX_PAGES,
       skipExternalLinks: process.env.SKIP_EXTERNAL === 'true',
-      excludePatterns: process.env.EXCLUDE_PATTERNS ? 
+      excludePatterns: process.env.EXCLUDE_PATTERNS ?
         process.env.EXCLUDE_PATTERNS.split(',').map(p => p.trim()) : []
     };
 
     const { visited, errors, brokenLinks } = await crawlSite(page, BASE_URL, options);
-    
+
     // Assertions
     expect(visited.size, 'Should have crawled at least 1 page').toBeGreaterThan(0);
     expect(errors.length, `Found ${errors.length} page errors`).toBe(0);
     expect(brokenLinks.length, `Found ${brokenLinks.length} broken links`).toBe(0);
-    
+
     console.log(`\n🎉 All ${visited.size} pages and their links are working correctly!`);
   });
 
   test('Check homepage loads correctly', async ({ page }) => {
     console.log(`🏠 Testing homepage: ${BASE_URL}`);
-    
+
     try {
-      const response = await page.goto(BASE_URL, { 
+      const response = await page.goto(BASE_URL, {
         waitUntil: 'networkidle',
-        timeout: TIMEOUT 
+        timeout: TIMEOUT
       });
       expect(response.status()).toBe(200);
-      
+
       // Check for common elements
       const title = await page.title();
       expect(title).toBeTruthy();
       console.log(`📄 Page title: "${title}"`);
-      
+
       // Check if page has content
       const bodyText = await page.textContent('body');
       expect(bodyText.length).toBeGreaterThan(100);
       console.log(`📝 Page content length: ${bodyText.length} characters`);
-      
+
       console.log('✅ Homepage check passed!');
     } catch (error) {
       console.error(`❌ Homepage test failed: ${error.message}`);
@@ -221,11 +228,11 @@ test.describe('Website Health Check', () => {
     for (const pagePath of criticalPages) {
       const fullUrl = `${BASE_URL}${pagePath}`;
       console.log(`🔍 Checking critical page: ${fullUrl}`);
-      
+
       try {
-        const response = await page.goto(fullUrl, { 
+        const response = await page.goto(fullUrl, {
           waitUntil: 'networkidle',
-          timeout: TIMEOUT 
+          timeout: TIMEOUT
         });
         expect(response.status(), `Critical page ${pagePath} should be accessible`).toBe(200);
         console.log(`✅ ${pagePath} - OK`);
