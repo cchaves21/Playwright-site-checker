@@ -1,0 +1,15 @@
+# Node Modules
+node_modules/
+
+# System files
+*.log
+*.tmp
+*.swp
+
+# OS files
+.DS_Store        # macOS
+Thumbs.db        # Windows
+
+# IDE files
+.idea/
+.vscode/
