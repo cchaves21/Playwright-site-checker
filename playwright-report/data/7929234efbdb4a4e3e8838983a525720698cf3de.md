@@ -1,0 +1,148 @@
+# Page snapshot
+
+```yaml
+- banner:
+  - link "Carlos Chaves – QA Engineer":
+    - /url: /
+  - navigation:
+    - list:
+      - listitem:
+        - link "Home":
+          - /url: /
+      - listitem:
+        - link "Case Studies":
+          - /url: /case-studies/
+      - listitem:
+        - link "CV":
+          - /url: /cv/
+- complementary:
+  - list
+  - list:
+    - listitem:
+      - link "LinkedIn":
+        - /url: https://www.linkedin.com/in/carlos-chaves-3b616924
+        - img "LinkedIn"
+    - listitem:
+      - link "Email":
+        - /url: mailto:carlosrschaves@gmail.com
+        - img "Email"
+    - listitem:
+      - link "GitHub":
+        - /url: https://github.com/cchaves21
+        - img "GitHub"
+    - listitem:
+      - link "Medium":
+        - /url: https://medium.com/@kchaves001
+        - img "Medium"
+- main "Content":
+  - article:
+    - heading "Carlos Chaves" [level=1]
+    - heading "Carlos Chaves" [level=1]
+    - text: Head of Quality & Senior QA Engineer Results-driven QA professional with 15+ years of experience in software quality assurance, test strategy implementation, and fostering continuous improvement cultures. Passionate about quality advocacy, team mentoring, and data-driven efficiency.
+    - link "View My CV":
+      - /url: /cv/
+    - link "Get In Touch":
+      - /url: "#contact"
+    - heading "🧭 Quick Navigation" [level=3]
+    - link "👨‍💼 About Me":
+      - /url: "#about"
+    - link "🏆 Career Highlights":
+      - /url: "#career-highlights"
+    - link "💡 What Drives Me":
+      - /url: "#what-drives-me"
+    - link "⚙️ Tech Stack":
+      - /url: "#tech-stack"
+    - link "📝 Articles":
+      - /url: "#articles"
+    - link "📞 Contact":
+      - /url: "#contact"
+    - link "📄 Full CV":
+      - /url: /cv/
+    - separator
+    - heading "👨‍💼 About Me" [level=2]
+    - text: I'm Carlos Chaves, a QA professional with over 15 years of experience in software quality, automation, and technical leadership. I started my journey in São Paulo, Brazil, working at a consultancy focused on integrated business solutions. What began as an internship quickly turned into a lifelong passion for testing and quality engineering. Over the years, I've worked across multiple industries, from finance to retail tech. Always with a focus on improving product quality and team maturity through smart processes and tooling. Currently, I serve as
+    - strong: Head of QA
+    - text: in a British company that has scaled revenue to $150M+ in the last year, where I lead strategic quality initiatives and support the growth of QA as an engineering discipline.
+    - separator
+    - heading "🏆 Career Highlights" [level=2]
+    - text: 🔁
+    - heading "Shift-Left Testing Implementation" [level=4]
+    - paragraph: Introduced shift-left testing and continuous integration practices across multiple organizations
+    - text: 🧪
+    - heading "Automated Test Frameworks" [level=4]
+    - paragraph: Designed and implemented automated test frameworks across multiple platforms
+    - text: 📘
+    - heading "QA Handbook Creation" [level=4]
+    - paragraph: Authored the company-wide QA Handbook to define standards and best practices
+    - text: 🚀
+    - heading "Path to Engineering Program" [level=4]
+    - paragraph: Created and led the Path to Engineering program, helping internal talent grow into engineering roles
+    - text: 🏆
+    - heading "PRAD Recognition Award" [level=4]
+    - paragraph: Received recognition from the largest bank in Latin America for QA leadership during the launch of PIX, a real-time payment system that revolutionized the Brazilian financial market
+    - text: 🤝
+    - heading "Mentoring & Collaboration" [level=4]
+    - paragraph: Passionate about mentoring, documentation, and cross-functional collaboration
+    - link "📂 View Case Studies":
+      - /url: /case-studies
+    - link "🛠 Tech Stack":
+      - /url: /tech-stack
+    - separator
+    - heading "💡 What Drives Me" [level=2]
+    - text: I believe quality is not just about finding bugs, it's about
+    - strong: building confidence
+    - text: in what we deliver,
+    - strong: enabling developers
+    - text: ", and"
+    - strong: championing user experience
+    - text: . Good QA is proactive, not reactive.
+    - separator
+    - heading "⚙️ Tech Stack" [level=2]
+    - heading "🤖 Test Automation Tools" [level=4]
+    - text: Appium, Selenium, Cypress, Playwright
+    - heading "💻 Languages & Scripting" [level=4]
+    - text: Java, JavaScript
+    - heading "🧪 Test Frameworks" [level=4]
+    - text: Cucumber, JUnit
+    - heading "🔄 CI/CD & Infrastructure" [level=4]
+    - text: Jenkins, GitHub Actions, GitLab CI
+    - heading "🤝 Collaboration & Documentation" [level=4]
+    - text: Jira, Xray
+    - heading "☁️ Cloud" [level=4]
+    - text: AWS
+    - separator
+    - heading "📝 Published Articles" [level=2]
+    - 'heading "Shift-Left Testing: It''s Not Just About Involving QA Early" [level=4]'
+    - text: Quality Engineering • Testing Strategy Exploring the true essence of shift-left testing beyond the common misconception of simply involving QA earlier in the development cycle. Discover how to build quality into every stage of your software development process.
+    - link "Read Article →":
+      - /url: https://medium.com/@kchaves001/shift-left-testing-its-not-just-about-involving-qa-early-ad80ed4db714
+    - 'heading "The Evolution of Leadership: From Command to Care" [level=4]'
+    - text: Leadership • Team Management A reflection on modern leadership in tech teams, examining how the shift from traditional command-and-control to empathetic, servant leadership creates more effective and motivated teams.
+    - link "Read Article →":
+      - /url: https://medium.com/@kchaves001/the-evolution-of-leadership-from-command-to-care-ae47d152e54e
+    - 'heading "The Test Pyramid: Insights from 15 Years of Experience" [level=4]'
+    - text: Test Architecture • Automation Strategy Real-world insights and lessons learned from implementing test pyramid strategies across different organizations, technologies, and team structures over 15 years in software quality assurance.
+    - link "Read Article →":
+      - /url: https://medium.com/@kchaves001/the-test-pyramid-insights-from-15-years-of-experience-4adbdaf300f5
+    - separator
+    - heading "📞 Let's Connect" [level=2]
+    - heading "Ready to collaborate?" [level=3]
+    - paragraph: I'm always open to discussing quality engineering, sharing experiences, or exploring new opportunities. Let's connect and see how we can work together to build better software.
+    - link "LinkedIn":
+      - /url: https://www.linkedin.com/in/carlos-chaves-3b616924
+    - link "GitHub":
+      - /url: https://github.com/cchaves21
+    - link "Email":
+      - /url: mailto:carlosrschaves@gmail.com
+    - link "My CV":
+      - /url: /cv/
+    - separator
+  - paragraph:
+    - text: Powered by
+    - link "Jekyll":
+      - /url: https://jekyllrb.com/
+    - text: "&"
+    - link "Hamilton":
+      - /url: https://github.com/ngzhio/jekyll-theme-hamilton
+  - paragraph: Carlos Chaves is a QA engineer with over 15 years of experience in software testing, automation, and quality culture. Passionate about mentoring and continuous improvement.
+```

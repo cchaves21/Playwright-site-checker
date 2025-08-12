@@ -1,0 +1,16 @@
+{
+  "name": "playwright-site-checker",
+  "version": "1.0.0",
+  "description": "Playwright project to check if all pages and links on a website are working.",
+  "main": "index.js",
+   "scripts": {
+    "test": "npx playwright test --reporter=list"
+  },
+  "keywords": ["playwright", "link-checker", "e2e-testing", "qa", "portfolio"],
+  "author": "Carlos Chaves",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.54.2",
+    "@types/node": "^24.2.1"
+  }
+}
