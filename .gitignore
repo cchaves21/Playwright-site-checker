@@ -1,6 +1,11 @@
 # Node Modules
 node_modules/
 
+# Playwright
+playwright-report/
+blob-report/
+test-results/
+
 # System files
 *.log
 *.tmp
