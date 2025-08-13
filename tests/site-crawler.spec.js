@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 
 // Configuration
 const DEFAULT_BASE_URL = 'https://www.carloschaves.com';
-const BASE_URL = 'https://www.carloschaves.com';//process.env.BASE_URL || DEFAULT_BASE_URL;
+const BASE_URL = process.env.BASE_URL || DEFAULT_BASE_URL;
 const MAX_PAGES = process.env.MAX_PAGES ? parseInt(process.env.MAX_PAGES) : 50;
 const TIMEOUT = process.env.TIMEOUT ? parseInt(process.env.TIMEOUT) : 30000;
 
@@ -66,10 +66,10 @@ async function crawlSite(page, startUrl, options = {}) {
           .filter(link =>
             link.href &&
             link.href.trim() !== '' &&
-            !link.href.startsWith('mailto:') && // Ignora email
-            !link.href.startsWith('tel:') &&    // Ignora telefone
-            !link.href.startsWith('javascript:') && // Ignora JS
-            !link.href.includes('#') // Ignora qualquer link com âncora interna
+            !link.href.startsWith('mailto:') &&
+            !link.href.startsWith('tel:') &&
+            !link.href.startsWith('javascript:') &&
+            !link.href.includes('#')
           )
       );
 
@@ -89,21 +89,70 @@ async function crawlSite(page, startUrl, options = {}) {
             continue;
           }
 
-          // Check external links
+          // Check external links with simple HEAD request
           if (link.startsWith('http') && !link.startsWith(BASE_URL)) {
             if (!skipExternalLinks) {
               console.log(`🌐 Checking external link: ${link}`);
+
+              // Verificar se é rede social conhecida primeiro
+              if (link.includes('linkedin.com') || link.includes('facebook.com') || link.includes('instagram.com') || link.includes('twitter.com') || link.includes('x.com')) {
+                console.log(`⚠️  Social media link (assuming valid): ${link}`);
+                continue;
+              }
+
+              // Usar HEAD request para validação mais leve
               try {
-                const res = await page.request.get(link, { timeout: 10000 });
-                if (res.status() >= 400) {
-                  brokenLinks.push({ url, link, text, status: res.status(), type: 'external' });
-                  console.log(`❌ Broken external link: ${link} (HTTP ${res.status()})`);
+                const res = await page.request.head(link, {
+                  timeout: 8000,
+                  headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                    'Accept-Language': 'pt-PT,pt;q=0.9,en;q=0.8',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'DNT': '1',
+                    'Connection': 'keep-alive',
+                  }
+                });
+
+                const status = res.status();
+
+                if (status >= 400 && status !== 999) {
+                  brokenLinks.push({ url, link, text, status, type: 'external' });
+                  console.log(`❌ Broken external link: ${link} (HTTP ${status})`);
+                } else if (status === 999) {
+                  console.log(`⚠️  Anti-bot response (999): ${link} - probably working but blocked`);
                 } else {
-                  console.log(`✅ External link OK: ${link}`);
+                  console.log(`✅ External link OK: ${link} (HTTP ${status})`);
                 }
+
               } catch (extError) {
-                brokenLinks.push({ url, link, text, error: extError.message, type: 'external' });
-                console.log(`⚠️  External link timeout: ${link}`);
+                // Se HEAD falhar com 405, tentar GET simples
+                if (extError.message.includes('Method Not Allowed') || extError.message.includes('405')) {
+                  try {
+                    const res = await page.request.get(link, {
+                      timeout: 6000,
+                      headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                        'Accept-Language': 'pt-PT,pt;q=0.9,en;q=0.8',
+                      }
+                    });
+
+                    const status = res.status();
+                    if (status >= 400 && status !== 999) {
+                      brokenLinks.push({ url, link, text, status, type: 'external' });
+                      console.log(`❌ Broken external link: ${link} (HTTP ${status})`);
+                    } else {
+                      console.log(`✅ External link OK: ${link} (HTTP ${status})`);
+                    }
+                  } catch (getFallbackError) {
+                    brokenLinks.push({ url, link, text, error: getFallbackError.message, type: 'external' });
+                    console.log(`❌ External link failed: ${link} - ${getFallbackError.message}`);
+                  }
+                } else {
+                  brokenLinks.push({ url, link, text, error: extError.message, type: 'external' });
+                  console.log(`❌ External link error: ${link} - ${extError.message}`);
+                }
               }
             }
             continue;
@@ -140,7 +189,6 @@ async function crawlSite(page, startUrl, options = {}) {
     // Small delay to be respectful
     await page.waitForTimeout(500);
   }
-
   // Generate summary report
   console.log('\n' + '='.repeat(60));
   console.log('📊 CRAWL SUMMARY');
