@@ -23,7 +23,7 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright tests (Chrome only)
+      - name: Run Playwright tests
         run: npx playwright test --reporter=html
 
       - name: Upload Playwright HTML report
