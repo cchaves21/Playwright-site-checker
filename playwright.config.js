@@ -20,7 +20,7 @@ export default defineConfig({
   // Reporting
   reporter: [
     ['html', { outputFolder: 'playwright-report' }],
-    ['json', { outputFile: 'test-results.json' }],
+    ['json', { outputFile: 'test-results/test-results.json' }],
     CI ? ['github'] : ['list']
   ].filter(Boolean),
 
