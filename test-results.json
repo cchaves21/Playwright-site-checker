@@ -1,0 +1,233 @@
+{
+  "config": {
+    "configFile": "/home/carlos/workspace/Playwright-site-checker/playwright.config.js",
+    "rootDir": "/home/carlos/workspace/Playwright-site-checker/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results.json"
+        }
+      ],
+      [
+        "list",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/home/carlos/workspace/Playwright-site-checker/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "quick-tests",
+        "name": "quick-tests",
+        "testDir": "/home/carlos/workspace/Playwright-site-checker/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "homepage.spec.js",
+          "critical-pages.spec.js"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/home/carlos/workspace/Playwright-site-checker/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "full-crawl",
+        "name": "full-crawl",
+        "testDir": "/home/carlos/workspace/Playwright-site-checker/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "full-crawl.spec.js"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/home/carlos/workspace/Playwright-site-checker/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/home/carlos/workspace/Playwright-site-checker/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "homepage.spec.js",
+          "critical-pages.spec.js"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/home/carlos/workspace/Playwright-site-checker/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/carlos/workspace/Playwright-site-checker/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "homepage.spec.js"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.54.2",
+    "workers": 2,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "full-crawl.spec.js",
+      "file": "full-crawl.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Full Website Crawl",
+          "file": "full-crawl.spec.js",
+          "line": 5,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should crawl and validate all pages and links",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "full-crawl",
+                  "projectName": "full-crawl",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "interrupted",
+                      "duration": 2479,
+                      "error": {
+                        "message": "Error: page.waitForTimeout: Target page, context or browser has been closed",
+                        "stack": "Error: page.waitForTimeout: Target page, context or browser has been closed\n    at WebsiteCrawler.crawl (/home/carlos/workspace/Playwright-site-checker/utils/crawler.js:32:23)\n    at /home/carlos/workspace/Playwright-site-checker/tests/full-crawl.spec.js:17:46",
+                        "location": {
+                          "file": "/home/carlos/workspace/Playwright-site-checker/utils/crawler.js",
+                          "column": 23,
+                          "line": 32
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39m../utils/crawler.js:32\n\n\u001b[0m \u001b[90m 30 |\u001b[39m       \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcrawlPage(url)\u001b[33m;\u001b[39m\n \u001b[90m 31 |\u001b[39m       \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mvisited\u001b[33m.\u001b[39madd(url)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 32 |\u001b[39m       \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 33 |\u001b[39m     }\n \u001b[90m 34 |\u001b[39m\n \u001b[90m 35 |\u001b[39m     \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprintSummary()\u001b[33m;\u001b[39m\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/home/carlos/workspace/Playwright-site-checker/utils/crawler.js",
+                            "column": 23,
+                            "line": 32
+                          },
+                          "message": "Error: page.waitForTimeout: Target page, context or browser has been closed\n\n\u001b[90m   at \u001b[39m../utils/crawler.js:32\n\n\u001b[0m \u001b[90m 30 |\u001b[39m       \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcrawlPage(url)\u001b[33m;\u001b[39m\n \u001b[90m 31 |\u001b[39m       \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mvisited\u001b[33m.\u001b[39madd(url)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 32 |\u001b[39m       \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mpage\u001b[33m.\u001b[39mwaitForTimeout(\u001b[35m500\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                       \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 33 |\u001b[39m     }\n \u001b[90m 34 |\u001b[39m\n \u001b[90m 35 |\u001b[39m     \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprintSummary()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at WebsiteCrawler.crawl (/home/carlos/workspace/Playwright-site-checker/utils/crawler.js:32:23)\u001b[22m\n\u001b[2m    at /home/carlos/workspace/Playwright-site-checker/tests/full-crawl.spec.js:17:46\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "🌐 Testing website: https://www.carloschaves.com\n"
+                        },
+                        {
+                          "text": "🚀 Starting crawl from: https://www.carloschaves.com\n"
+                        },
+                        {
+                          "text": "📝 Max pages limit: 50\n"
+                        },
+                        {
+                          "text": "🔍 Checking page [1/50]: https://www.carloschaves.com\n"
+                        },
+                        {
+                          "text": "❌ Navigation failed: https://www.carloschaves.com - page.goto: Test ended.\nCall log:\n\u001b[2m  - navigating to \"https://www.carloschaves.com/\", waiting until \"networkidle\"\u001b[22m\n\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-08-19T09:27:48.756Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/home/carlos/workspace/Playwright-site-checker/test-results/full-crawl-Full-Website-Cr-4b994-alidate-all-pages-and-links-full-crawl/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/home/carlos/workspace/Playwright-site-checker/test-results/full-crawl-Full-Website-Cr-4b994-alidate-all-pages-and-links-full-crawl/video.webm"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/home/carlos/workspace/Playwright-site-checker/test-results/full-crawl-Full-Website-Cr-4b994-alidate-all-pages-and-links-full-crawl/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/home/carlos/workspace/Playwright-site-checker/utils/crawler.js",
+                        "column": 23,
+                        "line": 32
+                      }
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "957eeb8f14bb18ebe774-b09e08ba251df1be45aa",
+              "file": "full-crawl.spec.js",
+              "line": 6,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-08-19T09:27:47.832Z",
+    "duration": 4857.228,
+    "expected": 0,
+    "skipped": 1,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
