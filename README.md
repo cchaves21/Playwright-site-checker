@@ -209,10 +209,17 @@ jobs:
 ## 🏗️ Project Structure
 
 ```
-your-project/
+playwright-project/
+├── config/
+│   └── constants.js          # Consts centralized
+├── utils/
+│   ├── crawler.js            # Key logic crawler
+│   ├── linkChecker.js        # Links validation
 ├── tests/
-│   └── website-health.spec.js
-├── playwright.config.js (optional)
+│   ├── homepage.spec.js      # Home page check
+│   ├── critical-pages.spec.js # Check the main pages
+│   └── full-crawl.spec.js    # Crawl complete
+├── playwright.config.js      # Playwright config
 ├── package.json
 └── README.md
 ```
