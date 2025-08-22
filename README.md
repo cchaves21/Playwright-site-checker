@@ -1,249 +1,285 @@
-# 🕸️ Website Health Check with Playwright
+# 🎭 Playwright Site Checker
 
-Automated testing suite to crawl and validate all pages and links on your Jekyll/GitHub Pages website.
+Automated tool for comprehensive website validation using Playwright. Checks pages, internal links, external links, and generates detailed site health reports.
 
-## 🎯 Features
+## 🚀 Features
 
-- **Full Site Crawling**: Automatically discovers and tests all internal pages
-- **Link Validation**: Checks all links (internal and external) for broken references
-- **Configurable**: Flexible options for different testing scenarios
-- **Detailed Reporting**: Comprehensive logs and error reporting
-- **CI/CD Ready**: Perfect for GitHub Actions and other CI pipelines
+- ✅ **Complete site crawling** - Automatically discovers and tests all pages
+- 🔗 **Link validation** - Verifies internal and external links
+- 📊 **Detailed reports** - HTML and JSON with comprehensive results
+- 🎯 **Quick tests** - Critical page validation
+- 🌐 **Cross-browser** - Support for Chrome, Firefox, and mobile
+- ⚡ **Performance optimized** - Specific configurations per test type
 
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Node.js (v14 or higher)
-- npm or yarn
-
-### Installation
-
-1. **Clone or download the test files**
-2. **Install dependencies**:
-   ```bash
-   npm init -y
-   npm install -D @playwright/test
-   npx playwright install
-   ```
-
-3. **Create the test file** (`tests/website-health.spec.js`) with the provided code
-
-4. **Run the tests**:
-   ```bash
-   # Basic run with your website URL
-   BASE_URL=https://your-username.github.io npx playwright test
-   
-   # Or for your specific site
-   BASE_URL=https://carloschaves.com npx playwright test
-   ```
-
-## ⚙️ Configuration
-
-### Environment Variables
-
-| Variable | Description | Default | Example |
-|----------|-------------|---------|---------|
-| `BASE_URL` | Your website URL | `https://your-username.github.io` | `https://carloschaves.com` |
-| `MAX_PAGES` | Maximum pages to crawl | `50` | `100` |
-| `TIMEOUT` | Page load timeout (ms) | `30000` | `60000` |
-| `SKIP_EXTERNAL` | Skip external link checks | `false` | `true` |
-| `EXCLUDE_PATTERNS` | Comma-separated exclude patterns | - | `admin,private,draft` |
-
-### Usage Examples
-
-```bash
-# Basic crawl
-BASE_URL=https://your-site.com npx playwright test
-
-# Crawl with custom limits
-BASE_URL=https://your-site.com MAX_PAGES=25 npx playwright test
-
-# Skip external links (faster)
-BASE_URL=https://your-site.com SKIP_EXTERNAL=true npx playwright test
-
-# Exclude certain paths
-BASE_URL=https://your-site.com EXCLUDE_PATTERNS=admin,draft npx playwright test
-
-# Run with custom timeout
-BASE_URL=https://your-site.com TIMEOUT=60000 npx playwright test
-
-# Run in headful mode (see browser)
-BASE_URL=https://your-site.com npx playwright test --headed
-
-# Run specific test only
-BASE_URL=https://your-site.com npx playwright test --grep "homepage"
-```
-
-## 📋 Test Coverage
-
-The test suite includes:
-
-### 🔍 Full Site Crawl
-- Discovers all internal pages automatically
-- Validates HTTP status codes
-- Checks all links on each page
-- Prevents infinite loops with visit tracking
-
-### 🏠 Homepage Validation
-- Ensures homepage loads correctly
-- Validates page title and content
-- Quick smoke test for critical functionality
-
-### 📄 Critical Pages Check
-- Tests important pages like `/cv/`, `/about/`, `/contact/`
-- Flexible - won't fail if optional pages don't exist
-- Easy to customize for your site structure
-
-## 📊 Sample Output
-
-```
-🚀 Starting crawl from: https://carloschaves.dev
-📝 Max pages limit: 50
-🔍 Checking page [1/50]: https://carloschaves.dev
-✅ Page OK: https://carloschaves.dev (HTTP 200)
-🔗 Found 12 links on https://carloschaves.dev
-📌 Added to queue: https://carloschaves.dev/cv/
-🌐 Checking external link: https://linkedin.com/in/carloschaves
-✅ External link OK: https://linkedin.com/in/carloschaves
-
-============================================================
-📊 CRAWL SUMMARY
-============================================================
-✅ Total pages checked: 5
-❌ Pages with errors: 0
-🔗 Broken links found: 0
-
-🎉 All 5 pages and their links are working correctly!
-```
-
-## 🐛 Error Detection
-
-The tool detects and reports:
-
-- **HTTP 4xx/5xx errors** on pages
-- **Broken internal links**
-- **Broken external links** (optional)
-- **Navigation timeouts**
-- **Missing resources**
-
-## 🔧 Customization
-
-### Adding Custom Tests
-
-```javascript
-test('Check specific functionality', async ({ page }) => {
-  await page.goto(`${BASE_URL}/contact`);
-  
-  // Test contact form exists
-  const form = page.locator('form');
-  await expect(form).toBeVisible();
-  
-  // Test specific elements
-  await expect(page.locator('h1')).toContainText('Contact');
-});
-```
-
-### Modifying Crawler Behavior
-
-```javascript
-const options = {
-  maxPages: 100,
-  skipExternalLinks: true,
-  excludePatterns: ['admin', 'private', '.pdf'],
-  // Add custom validation logic
-  validateContent: async (page, url) => {
-    // Custom content validation
-  }
-};
-```
-
-## 🎯 GitHub Actions Integration
-
-Create `.github/workflows/website-health.yml`:
-
-```yaml
-name: Website Health Check
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  schedule:
-    - cron: '0 6 * * 1'  # Weekly on Monday at 6 AM
-
-jobs:
-  health-check:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        
-    - name: Install dependencies
-      run: |
-        npm init -y
-        npm install -D @playwright/test
-        npx playwright install --with-deps
-    
-    - name: Run website health check
-      env:
-        BASE_URL: https://your-username.github.io
-        MAX_PAGES: 50
-        SKIP_EXTERNAL: false
-      run: npx playwright test
-      
-    - name: Upload test results
-      uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        name: playwright-report
-        path: playwright-report/
-```
-
-## 🏗️ Project Structure
+## 📁 Project Structure
 
 ```
 playwright-project/
 ├── config/
-│   └── constants.js          # Consts centralized
+│   └── constants.js          # Centralized configuration
 ├── utils/
-│   ├── crawler.js            # Key logic crawler
-│   ├── linkChecker.js        # Links validation
+│   ├── crawler.js            # Main crawler logic
+│   ├── linkChecker.js        # Link validator
 ├── tests/
-│   ├── homepage.spec.js      # Home page check
-│   ├── critical-pages.spec.js # Check the main pages
-│   └── full-crawl.spec.js    # Crawl complete
-├── playwright.config.js      # Playwright config
+│   ├── homepage.spec.js      # Homepage tests
+│   ├── critical-pages.spec.js # Critical pages tests
+│   └── full-crawl.spec.js    # Complete site crawl
+├── playwright.config.js      # Playwright configuration
 ├── package.json
 └── README.md
 ```
 
-## 📝 Best Practices
+## ⚙️ Installation
 
-1. **Start Small**: Begin with a low `MAX_PAGES` limit
-2. **Regular Testing**: Set up automated runs via GitHub Actions
-3. **External Links**: Consider skipping external links for faster runs
-4. **Exclude Patterns**: Skip admin, draft, or private pages
-5. **Monitor Performance**: Adjust timeout values based on your site's performance
+### 1. Install dependencies
+```bash
+npm install
+```
 
-## 🤝 Contributing
+### 2. Install Playwright browsers
+```bash
+npm run install:browsers
+```
 
-Feel free to:
-- Add new test scenarios
-- Improve error handling
-- Enhance reporting features
-- Submit bug fixes
+## 🎯 Usage
 
-## 📄 License
+### **Main Commands**
 
-MIT License - feel free to use and modify for your projects!
+```bash
+# Run all tests (headless)
+npm test
+
+# Quick tests (homepage + critical pages)
+npm run test:quick
+
+# Complete site crawl (slower)
+npm run test:crawl
+```
+
+### **Debugging and Development**
+
+```bash
+# Run with visible browser
+npm run test:headed
+
+# Quick tests only with interface
+npm run test:headed:quick
+
+# Step-by-step debug mode
+npm run test:debug
+
+# Playwright GUI interface
+npm run test:ui
+```
+
+### **Reports**
+
+```bash
+# View HTML report from last test run
+npm run report
+```
+
+## 🔧 Configuration
+
+### **Environment Variables**
+
+Create a `.env` file or set environment variables:
+
+```bash
+# Base URL of the site to test
+BASE_URL=https://www.yoursite.com
+
+# Maximum number of pages to crawl
+MAX_PAGES=50
+
+# Timeout in milliseconds
+TIMEOUT=30000
+
+# Skip external links (true/false)
+SKIP_EXTERNAL=false
+
+# Patterns to exclude URLs (comma-separated)
+EXCLUDE_PATTERNS=/admin,/private
+```
+
+### **Usage Examples with Variables**
+
+```bash
+# Test local site
+BASE_URL=http://localhost:4000 npm run test:quick
+
+# Limited crawl
+MAX_PAGES=10 npm run test:crawl
+
+# Ignore external links
+SKIP_EXTERNAL=true npm run test:crawl
+
+# Custom timeout
+TIMEOUT=60000 npm test
+```
+
+## 🎨 Test Types
+
+### **1. Quick Tests (`quick-tests`)**
+- Homepage validation
+- Critical pages verification
+- Execution: ~30 seconds
+- Ideal for: CI/CD, daily development
+
+### **2. Full Crawl (`full-crawl`)**
+- Discovers all site pages
+- Validates all internal and external links
+- Generates complete site map
+- Execution: 2-10 minutes (depends on site)
+- Ideal for: Complete validation, pre-deployment
+
+### **3. Cross-browser (`firefox`, `mobile`)**
+- Tests on Firefox and mobile devices
+- Ensures compatibility
+- Ideal for: UX validation
+
+## 📊 Reports
+
+Tests generate reports in multiple formats:
+
+- **HTML**: Interactive visual interface (`playwright-report/`)
+- **JSON**: Structured data for integration (`test-results.json`)
+- **Screenshots**: Captures on failure
+- **Videos**: Recording of failed tests
+
+## 🏗️ CI/CD Integration
+
+### **GitHub Actions**
+
+```yaml
+- name: Run Playwright tests
+  run: npm run test:quick
+
+- name: Upload test results
+  uses: actions/upload-artifact@v4
+  if: always()
+  with:
+    name: playwright-report
+    path: playwright-report/
+```
+
+### **Automatic Configuration**
+
+- **Local**: Parallel execution, interface available
+- **CI**: Sequential execution, headless, optimized reports
+
+## 🔍 Troubleshooting
+
+### **Common Issues**
+
+**1. Local site doesn't load:**
+```bash
+# Check if site is running
+curl http://localhost:4000
+
+# Wait for site to start before tests
+BASE_URL=http://localhost:4000 npm run test:quick
+```
+
+**2. Too many broken external links:**
+```bash
+# Ignore external links
+SKIP_EXTERNAL=true npm run test:crawl
+```
+
+**3. Timeout on slow pages:**
+```bash
+# Increase timeout
+TIMEOUT=60000 npm test
+```
+
+**4. Memory error on large crawls:**
+```bash
+# Limit number of pages
+MAX_PAGES=20 npm run test:crawl
+```
+
+### **Advanced Debugging**
+
+```bash
+# See detailed logs
+DEBUG=pw:* npm run test:quick
+
+# Run specific test
+npx playwright test homepage.spec.js --headed
+
+# Generate trace for analysis
+npx playwright test --trace on
+```
+
+## 📈 Best Practices
+
+### **Daily Development**
+1. `npm run test:quick` before commits
+2. `npm run test:headed:quick` for debugging
+3. `npm run report` to view results
+
+### **Before Deployment**
+1. `npm run test:crawl` for complete validation
+2. Check broken link reports
+3. Test on multiple browsers if needed
+
+### **CI/CD Pipeline**
+1. `npm run test:quick` on PRs
+2. `npm run test:crawl` on production deployment
+3. Save report artifacts
+
+## 🛠️ Customization
+
+### **Add New Critical Pages**
+
+Edit `config/constants.js`:
+```javascript
+export const CRITICAL_PAGES = [
+  '/',
+  '/about',
+  '/contact',
+  '/your-new-page'  // Add here
+];
+```
+
+### **Exclude URLs from Crawl**
+
+```bash
+EXCLUDE_PATTERNS="/admin,/private,/test" npm run test:crawl
+```
+
+### **Customize Timeouts**
+
+Edit `config/constants.js`:
+```javascript
+export const TIMEOUT = 45000; // 45 seconds
+```
+
+## 📝 Changelog
+
+### v1.0.0
+- ✅ Modular structure with Page Objects
+- ✅ Complete website crawler
+- ✅ Internal and external link validation
+- ✅ HTML and JSON reports
+- ✅ CI/CD optimized configuration
+- ✅ Multiple test project support
 
 ---
 
-**Happy Testing!** 🚀 Keep your website healthy and your links unbroken!
+## 🤝 Contributing
+
+1. Fork the project
+2. Create a branch: `git checkout -b feature/new-feature`
+3. Commit: `git commit -m 'Add new feature'`
+4. Push: `git push origin feature/new-feature`
+5. Open a Pull Request
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+---
+
+**Made with ❤️ by [Carlos Chaves](https://www.carloschaves.com)**
