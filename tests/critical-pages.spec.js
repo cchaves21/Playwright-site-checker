@@ -16,7 +16,6 @@ test.describe('Critical Pages Tests', () => {
         console.log(`✅ ${pagePath} - OK`);
       } catch (error) {
         console.log(`ℹ️  ${pagePath} - Not found: ${error.message}`);
-        // Não falha o teste para páginas opcionais
       }
     }
   });

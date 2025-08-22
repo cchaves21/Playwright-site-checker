@@ -12,7 +12,7 @@ export default defineConfig({
   },
 
   // Execution settings
-  fullyParallel: !CI, // Parallel only in local development
+  fullyParallel: !CI,
   forbidOnly: CI,
   retries: CI ? 2 : 1,
   workers: CI ? 1 : 2,
@@ -29,7 +29,7 @@ export default defineConfig({
     baseURL: BASE_URL,
 
     // Timeouts
-    actionTimeout: TIMEOUT / 3, // 10 seconds if TIMEOUT is 30s
+    actionTimeout: TIMEOUT / 3,
     navigationTimeout: TIMEOUT,
 
     // Browser settings
@@ -60,7 +60,6 @@ export default defineConfig({
       testMatch: ['homepage.spec.js', 'critical-pages.spec.js'],
       use: {
         ...devices['Desktop Chrome'],
-        // Faster settings for quick tests
         actionTimeout: 5000,
         navigationTimeout: 15000,
       },
@@ -72,7 +71,6 @@ export default defineConfig({
       testMatch: 'full-crawl.spec.js',
       use: {
         ...devices['Desktop Chrome', 'Desktop Firefox'],
-        // More generous timeouts for crawling
         actionTimeout: 15000,
         navigationTimeout: 45000,
       },
